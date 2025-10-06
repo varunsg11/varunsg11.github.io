@@ -203,24 +203,6 @@
             color: var(--text-light);
         }
 
-        .contact-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-light);
-        }
-
-        .contact-item i {
-            color: var(--accent);
-        }
-
         .hero-image {
             flex: 1;
             text-align: center;
@@ -233,12 +215,6 @@
             object-fit: cover;
             border: 5px solid var(--accent);
             box-shadow: var(--shadow);
-            background: linear-gradient(45deg, var(--accent), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 4rem;
         }
 
         /* About Section */
@@ -442,8 +418,11 @@
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            justify-content: center;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
         .project-card {
@@ -561,6 +540,15 @@
             color: var(--text);
         }
 
+        .contact-details p, .contact-details a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .contact-details a:hover {
+            color: var(--accent);
+        }
+
         .contact-form {
             flex: 1;
         }
@@ -676,6 +664,11 @@
                 grid-template-columns: 1fr;
                 max-width: 500px;
             }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -737,6 +730,10 @@
             .research-grid {
                 grid-template-columns: 1fr;
             }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -772,28 +769,10 @@
                     <h1>Hi, I'm <span>Varun Sadashive Gowda</span></h1>
                     <p>Detail-oriented, self-motivated professional with approximately 2.3 years of IT experience in customer-facing roles, demonstrating strong problem-solving and communication skills.</p>
                     
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>varunsg118@gmail.com</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <span>+91 8431262742</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fab fa-linkedin"></i>
-                            <span>linkedin.com/in/varuns11/</span>
-                        </div>
-                    </div>
-                    
                     <a href="#contact" class="btn">Get In Touch</a>
                 </div>
                 <div class="hero-image">
-                    <!-- Replace with your actual image -->
-                    <div class="profile-img">
-                        <i class="fas fa-code"></i>
-                    </div>
+                    <img src="me.jpg" alt="Varun Gowda" class="profile-img">
                 </div>
             </div>
         </div>
@@ -822,10 +801,10 @@
                         <div class="skill-item">
                             <div class="skill-name">
                                 <span>ABAP</span>
-                                <span>85%</span>
+                                <span>90%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-level" style="width: 85%"></div>
+                                <div class="skill-level" style="width: 90%"></div>
                             </div>
                         </div>
                         <div class="skill-item">
@@ -840,19 +819,19 @@
                         <div class="skill-item">
                             <div class="skill-name">
                                 <span>C/C++</span>
-                                <span>85%</span>
+                                <span>80%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-level" style="width: 85%"></div>
+                                <div class="skill-level" style="width: 80%"></div>
                             </div>
                         </div>
                         <div class="skill-item">
                             <div class="skill-name">
                                 <span>SQL</span>
-                                <span>85%</span>
+                                <span>70%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-level" style="width: 85%"></div>
+                                <div class="skill-level" style="width: 70%"></div>
                             </div>
                         </div>
                     </div>
@@ -992,7 +971,7 @@
                         </div>
                         <div class="contact-details">
                             <h3>Email</h3>
-                            <p>varunsg118@gmail.com</p>
+                            <a href="mailto:varunsg118@gmail.com">varunsg118@gmail.com</a>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1001,7 +980,7 @@
                         </div>
                         <div class="contact-details">
                             <h3>Phone</h3>
-                            <p>+91 8431262742</p>
+                            <a href="tel:+918431262742">+91 8431262742</a>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1010,7 +989,7 @@
                         </div>
                         <div class="contact-details">
                             <h3>LinkedIn</h3>
-                            <p>linkedin.com/in/varuns11/</p>
+                            <a href="https://www.linkedin.com/in/varuns11/" target="_blank">linkedin.com/in/varuns11/</a>
                         </div>
                     </div>
                 </div>
