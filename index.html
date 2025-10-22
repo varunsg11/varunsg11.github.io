@@ -895,7 +895,6 @@
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="#education">Education</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li><a href="resume.pdf" class="btn btn-resume" download>Download Resume</a></li>
                 </ul>
                 <div class="hamburger">
                     <span></span>
@@ -1143,7 +1142,7 @@
                 </div>
                 <div class="contact-form">
                     <!-- Google Form Integration -->
-                    <form action="https://docs.google.com/forms/d/e/1FAIpQLSdSEsdppfSSiL6v4YWiLl3ynA8UMnZEd-HBcl1zHh7-gpjDFA/formResponse" method="POST" id="contactForm">
+                    <form action="https://docs.google.com/forms/d/e/1FAIpQLSdSEsdppfSSiL6v4YWiLl3ynA8UMnZEd-HBcl1zHh7-gpjDFA/formResponse" method="POST" target="hidden_iframe" id="contactForm">
                         <div class="form-group">
                             <label for="name">Your Name</label>
                             <input type="text" id="name" name="entry.2005620554" class="form-control" required>
@@ -1162,6 +1161,7 @@
                         </div>
                         <button type="submit" class="btn">Send Message</button>
                     </form>
+                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
                     <div id="successMessage" class="success-message">
                         Thank you for your message! I'll get back to you soon.
                     </div>
@@ -1181,7 +1181,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 Varun Sadashive Gowda. All Rights Reserved.</p>
+                <p>&copy; 2023 Varun Sadashive Gowda. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
@@ -1206,42 +1206,24 @@
         
         // Google Form Submission Handler
         document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const form = this;
-            const formData = new FormData(form);
-            const submitButton = form.querySelector('button[type="submit"]');
+            const submitButton = this.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.textContent;
             
             // Show loading state
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
             
-            // Submit to Google Forms
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
-            })
-            .then(() => {
-                // Show success message
+            // Show success message after a short delay
+            setTimeout(() => {
                 document.getElementById('successMessage').style.display = 'block';
-                form.reset();
+                this.reset();
                 
                 // Reset button after delay
                 setTimeout(() => {
                     submitButton.textContent = originalButtonText;
                     submitButton.disabled = false;
                 }, 3000);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error sending your message. Please try again or email me directly at varunsg118@gmail.com');
-                
-                // Reset button
-                submitButton.textContent = originalButtonText;
-                submitButton.disabled = false;
-            });
+            }, 1000);
         });
         
         // Smooth scrolling for anchor links
@@ -1276,4 +1258,3 @@
     </script>
 </body>
 </html>
-
