@@ -14,6 +14,4 @@ This is my personal portfolio website hosted on GitHub Pages.
 ## Technologies Used
 
 - HTML5
-- CSS3
-- JavaScript
-- Font Awesome Icons
+
