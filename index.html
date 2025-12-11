@@ -55,46 +55,41 @@ header { background-color: rgba(10, 10, 10, 0.95); box-shadow: 0 5px 15px rgba(1
 .about-text h3 { font-size: 1.8rem; margin-bottom: 20px; color: var(--text); }
 .about-text p { margin-bottom: 20px; color: var(--text-light); }
 
-/* NEW: one-line skills with circular indicators */
-.skills { margin-top: 20px; }
+/* CENTER & INTERACTIVE SKILLS */
+.skills { margin-top: 20px; display: flex; justify-content: center; }
 .skills-row {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
   align-items: center;
+  justify-content: center; /* center horizontally */
 }
 .skill-circle-card {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border: 1px solid rgba(255,255,255,0.04);
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 999px;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+  cursor: pointer;
+  user-select: none;
+  min-width: 180px;
 }
-.skill-icon {
-  font-size: 1.1rem;
-  color: var(--accent-light);
-}
-.skill-label {
-  display: flex;
-  flex-direction: column;
-}
-.skill-name {
-  font-weight: 700;
-  color: var(--text);
-  font-size: 0.95rem;
-}
-.skill-percent-text {
-  font-size: 0.78rem;
-  color: var(--text-light);
-}
+.skill-circle-card:focus { outline: 3px solid rgba(179,0,0,0.18); }
+.skill-circle-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 12px 30px rgba(179,0,0,0.18); }
+.skill-circle-card.active { background: linear-gradient(90deg, rgba(179,0,0,0.06), rgba(255,255,255,0.01)); }
+.skill-icon { font-size: 1.1rem; color: var(--accent-light); }
+.skill-label { display: flex; flex-direction: column; }
+.skill-name { font-weight: 700; color: var(--text); font-size: 0.95rem; }
+.skill-percent-text { font-size: 0.78rem; color: var(--text-light); }
 
 /* circular progress */
 .skill-progress-circle {
   --value: 0;
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background:
     conic-gradient(var(--accent-light) calc(var(--value) * 1%), rgba(255,255,255,0.06) 0deg);
@@ -102,17 +97,25 @@ header { background-color: rgba(10, 10, 10, 0.95); box-shadow: 0 5px 15px rgba(1
   align-items: center;
   justify-content: center;
   position: relative;
+  transition: background 0.6s ease;
 }
 .skill-progress-circle::after {
   content: '';
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--primary);
 }
+.skill-percent-inner { position: absolute; font-size: 0.78rem; color: var(--text); font-weight:700; }
+
+/* expanded description when active */
+.skill-desc { display: none; margin-top: 8px; color: var(--text-light); font-size: 0.9rem; }
+.skill-circle-card.expanded { flex-direction: column; align-items: center; padding: 16px; min-width: 240px; }
+.skill-circle-card.expanded .skill-label { align-items: center; text-align:center; }
+.skill-circle-card.expanded .skill-desc { display: block; }
 
 /* Technical skills list styled */
-.tech-skills { margin-top:18px; display:flex; flex-wrap:wrap; gap:8px; }
+.tech-skills { margin-top:18px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
 .tech-pill { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); padding:8px 12px; border-radius:999px; color:var(--text-light); font-weight:600; }
 
 /* Experience Section */
@@ -132,27 +135,13 @@ header { background-color: rgba(10, 10, 10, 0.95); box-shadow: 0 5px 15px rgba(1
 .timeline-item:nth-child(odd)::after { right: -10px; }
 .timeline-item:nth-child(even)::after { left: -10px; }
 
-/* NEW: Certifications simple bullets */
+/* Certifications simple bullets */
 .certifications { background-color: var(--primary); position: relative; }
 .certifications::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 70% 50%, rgba(179, 0, 0, 0.05) 0%, transparent 50%); }
-.cert-content {
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-.cert-list {
-  list-style: disc;
-  padding-left: 25px;
-  color: var(--text-light);
-}
-.cert-list li {
-  margin-bottom: 10px;
-}
-.cert-list a {
-  color: var(--accent-light);
-  text-decoration: underline;
-}
+.cert-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.cert-list { list-style: disc; padding-left: 25px; color: var(--text-light); }
+.cert-list li { margin-bottom: 10px; }
+.cert-list a { color: var(--accent-light); text-decoration: underline; }
 
 /* Research Section */
 .research { background-color: var(--secondary); position: relative; }
@@ -302,54 +291,71 @@ footer { background-color: var(--dark); color: var(--text); padding: 50px 0 20px
 
 <div class="skills">
   <!-- ONE-LINE SKILLS WITH CIRCULAR PERCENTAGES -->
-  <div class="skills-row">
-    <div class="skill-circle-card" data-percent="90">
-      <div class="skill-progress-circle"></div>
+  <div class="skills-row" id="skillsRow">
+    <div class="skill-circle-card" data-percent="90" role="button" tabindex="0" aria-pressed="false" aria-expanded="false" aria-label="Python skill 90 percent">
+      <div class="skill-progress-circle" aria-hidden="true">
+        <div class="skill-percent-inner">0%</div>
+      </div>
       <div class="skill-label">
         <span class="skill-name"><i class="fab fa-python skill-icon"></i> Python</span>
         <span class="skill-percent-text">90%</span>
       </div>
+      <div class="skill-desc" hidden>Experienced in scripting, automation, data-processing and ML prototyping.</div>
     </div>
 
-    <div class="skill-circle-card" data-percent="90">
-      <div class="skill-progress-circle"></div>
+    <div class="skill-circle-card" data-percent="90" role="button" tabindex="0" aria-pressed="false" aria-expanded="false" aria-label="ABAP skill 90 percent">
+      <div class="skill-progress-circle" aria-hidden="true">
+        <div class="skill-percent-inner">0%</div>
+      </div>
       <div class="skill-label">
         <span class="skill-name"><i class="fas fa-database skill-icon"></i> ABAP</span>
         <span class="skill-percent-text">90%</span>
       </div>
+      <div class="skill-desc" hidden>Extensive experience with ABAP development and SAP integrations.</div>
     </div>
 
-    <div class="skill-circle-card" data-percent="80">
-      <div class="skill-progress-circle"></div>
+    <div class="skill-circle-card" data-percent="80" role="button" tabindex="0" aria-pressed="false" aria-expanded="false" aria-label="Java skill 80 percent">
+      <div class="skill-progress-circle" aria-hidden="true">
+        <div class="skill-percent-inner">0%</div>
+      </div>
       <div class="skill-label">
         <span class="skill-name"><i class="fab fa-java skill-icon"></i> Java</span>
         <span class="skill-percent-text">80%</span>
       </div>
+      <div class="skill-desc" hidden>Object-oriented design and backend development experience.</div>
     </div>
 
-    <div class="skill-circle-card" data-percent="80">
-      <div class="skill-progress-circle"></div>
+    <div class="skill-circle-card" data-percent="80" role="button" tabindex="0" aria-pressed="false" aria-expanded="false" aria-label="C and C++ skill 80 percent">
+      <div class="skill-progress-circle" aria-hidden="true">
+        <div class="skill-percent-inner">0%</div>
+      </div>
       <div class="skill-label">
         <span class="skill-name"><i class="fas fa-code skill-icon"></i> C / C++</span>
         <span class="skill-percent-text">80%</span>
       </div>
+      <div class="skill-desc" hidden>Systems programming foundations and algorithmic implementations.</div>
     </div>
 
-    <div class="skill-circle-card" data-percent="70">
-      <div class="skill-progress-circle"></div>
+    <div class="skill-circle-card" data-percent="70" role="button" tabindex="0" aria-pressed="false" aria-expanded="false" aria-label="SQL skill 70 percent">
+      <div class="skill-progress-circle" aria-hidden="true">
+        <div class="skill-percent-inner">0%</div>
+      </div>
       <div class="skill-label">
         <span class="skill-name"><i class="fas fa-database skill-icon"></i> SQL</span>
         <span class="skill-percent-text">70%</span>
       </div>
+      <div class="skill-desc" hidden>Database design, optimization and complex queries.</div>
     </div>
 
-    <!-- NEW: JavaScript at 70% -->
-    <div class="skill-circle-card" data-percent="70">
-      <div class="skill-progress-circle"></div>
+    <div class="skill-circle-card" data-percent="70" role="button" tabindex="0" aria-pressed="false" aria-expanded="false" aria-label="JavaScript skill 70 percent">
+      <div class="skill-progress-circle" aria-hidden="true">
+        <div class="skill-percent-inner">0%</div>
+      </div>
       <div class="skill-label">
         <span class="skill-name"><i class="fab fa-js-square skill-icon"></i> JavaScript</span>
         <span class="skill-percent-text">70%</span>
       </div>
+      <div class="skill-desc" hidden>Front-end interactions and small utility scripts.</div>
     </div>
   </div>
 
@@ -644,12 +650,14 @@ submitButton.disabled = false;
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 anchor.addEventListener('click', function(e) {
+if (this.getAttribute('href').startsWith('#')) {
 e.preventDefault();
 const targetId = this.getAttribute('href');
 if(targetId === '#') return;
 const targetElement = document.querySelector(targetId);
 if(targetElement) {
 window.scrollTo({ top: targetElement.offsetTop - 70, behavior: 'smooth' });
+}
 }
 });
 });
@@ -666,13 +674,65 @@ header.style.boxShadow = '0 5px 15px rgba(179, 0, 0, 0.3)';
 }
 });
 
-// JS to set circular percentages
-document.querySelectorAll('.skill-circle-card').forEach(card => {
-  const percent = Number(card.getAttribute('data-percent')) || 0;
-  const circle = card.querySelector('.skill-progress-circle');
-  circle.style.setProperty('--value', percent / 100 * 100);
+// SKILLS: animate circular progress when in view, make cards interactive (click/keyboard to expand)
+const skillCards = document.querySelectorAll('.skill-circle-card');
+
+// Animate circle value from 0 to target percent
+function setCircleValue(circleEl, value) {
+  const pct = Math.max(0, Math.min(100, Math.round(value)));
+  circleEl.style.setProperty('--value', pct);
+  const inner = circleEl.querySelector('.skill-percent-inner');
+  if(inner) inner.textContent = pct + '%';
+}
+
+// IntersectionObserver to animate when card enters viewport
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      const card = entry.target;
+      const target = Number(card.getAttribute('data-percent')) || 0;
+      const circle = card.querySelector('.skill-progress-circle');
+      // smooth increment animation
+      let current = 0;
+      const step = Math.max(1, Math.floor(target/18));
+      const id = setInterval(() => {
+        current += step;
+        if(current >= target) { current = target; clearInterval(id); }
+        setCircleValue(circle, current);
+      }, 20);
+      observer.unobserve(card);
+    }
+  });
+}, { threshold: 0.35 });
+
+skillCards.forEach(card => {
+  // observe for animation
+  observer.observe(card);
+
+  // click / keyboard interaction to toggle expanded view
+  function toggleExpand() {
+    const expanded = card.classList.toggle('expanded');
+    card.setAttribute('aria-expanded', expanded);
+    // set focus for accessibility
+    if(expanded) card.querySelector('.skill-progress-circle').focus();
+  }
+
+  card.addEventListener('click', (e) => {
+    // ignore clicks on links if any
+    toggleExpand();
+  });
+
+  card.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(); }
+    if(e.key === 'Escape') { card.classList.remove('expanded'); card.setAttribute('aria-expanded', 'false'); }
+  });
 });
+
+// On load, set initial values to 0 for all circles (for screen-readers and fallback)
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.skill-progress-circle').forEach(circle => setCircleValue(circle, 0));
+});
+
 </script>
 </body>
 </html>
-
